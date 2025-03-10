@@ -61,11 +61,8 @@ func init() {
 func getFlagValue(cmd *cobra.Command, flag string) string {
 	value, err := cmd.Flags().GetString(flag)
 	if err != nil {
-		logUnexpectedError()
+		log.Fatal(color.RedString("An unexpected error occured while getting flags."))
 	}
 	return value
 }
 
-func logUnexpectedError() {
-	log.Fatal(color.RedString("An unexpected error occured while getting flags."))
-}
