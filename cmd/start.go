@@ -6,6 +6,8 @@ import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/waynekn/tidytables/dbconn"
+	"github.com/waynekn/tidytables/logging"
+	"github.com/waynekn/tidytables/tui"
 )
 
 // startCmd represents the start command
@@ -22,7 +24,7 @@ This command requires specific flags to provide the necessary database connectio
 		dbName := getFlagValue(cmd, "name")
 		host := getFlagValue(cmd, "host")
 
-		db, err := dbconn.ConnectPostgres(host, port, user, password, dbName)
+		db, err := dbconn.OpenDb(host, port, user, password, dbName)
 
 		if err != nil {
 			log.SetFlags(0)
@@ -32,8 +34,17 @@ This command requires specific flags to provide the necessary database connectio
 			log.Printf(color.GreenString("successfully connected to %v database"), dbName)
 
 		}
-
 		defer db.Close()
+
+		logFile, err := logging.OpenLogFile()
+
+		if err != nil {
+			log.Fatal(color.RedString(err.Error()))
+		}
+
+		defer logFile.Close()
+
+		tui.StartTea()
 
 	},
 }
@@ -65,4 +76,3 @@ func getFlagValue(cmd *cobra.Command, flag string) string {
 	}
 	return value
 }
-
