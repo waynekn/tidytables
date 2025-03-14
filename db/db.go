@@ -1,4 +1,4 @@
-package dbconn
+package db
 
 import (
 	"database/sql"
@@ -7,7 +7,7 @@ import (
 	"github.com/waynekn/tidytables/utils"
 )
 
-var Db *sql.DB
+var globalDb *sql.DB
 
 type queryResult struct {
 	TableColumns []table.Column
@@ -19,13 +19,13 @@ func OpenDb(host, port, user, password, dbName string) (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	Db = db
+	globalDb = db
 	return db, nil
 
 }
 
 func QueryDB(q string) (*queryResult, error) {
-	rows, err := Db.Query(q)
+	rows, err := globalDb.Query(q)
 
 	if err != nil {
 		return nil, err

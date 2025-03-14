@@ -5,7 +5,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/fatih/color"
-	"github.com/waynekn/tidytables/dbconn"
+	"github.com/waynekn/tidytables/db"
 )
 
 type viewMode int
@@ -36,7 +36,7 @@ func (m model) Init() tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case QuerySubmittedMsg:
-		res, err := dbconn.QueryDB(msg.Query)
+		res, err := db.QueryDB(msg.Query)
 		if err != nil {
 			log.Fatal(color.RedString(err.Error()))
 		}

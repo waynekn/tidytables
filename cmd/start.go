@@ -5,7 +5,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"github.com/waynekn/tidytables/dbconn"
+	"github.com/waynekn/tidytables/db"
 	"github.com/waynekn/tidytables/logging"
 	"github.com/waynekn/tidytables/tui"
 )
@@ -24,7 +24,7 @@ This command requires specific flags to provide the necessary database connectio
 		dbName := getFlagValue(cmd, "name")
 		host := getFlagValue(cmd, "host")
 
-		db, err := dbconn.OpenDb(host, port, user, password, dbName)
+		connection, err := db.OpenDb(host, port, user, password, dbName)
 
 		if err != nil {
 			log.SetFlags(0)
@@ -34,7 +34,7 @@ This command requires specific flags to provide the necessary database connectio
 			log.Printf(color.GreenString("successfully connected to %v database"), dbName)
 
 		}
-		defer db.Close()
+		defer connection.Close()
 
 		logFile, err := logging.OpenLogFile()
 
