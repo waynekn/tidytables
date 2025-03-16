@@ -9,6 +9,7 @@ require (
 	github.com/fatih/color v1.18.0
 	github.com/jackc/pgx/v5 v5.7.2
 	github.com/spf13/cobra v1.9.1
+	golang.org/x/term v0.27.0
 )
 
 require (
