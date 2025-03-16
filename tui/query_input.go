@@ -32,7 +32,6 @@ func defaultStyles() *Styles {
 
 type queryInput struct {
 	viewport    viewport.Model
-	messages    []string
 	textarea    textarea.Model
 	senderStyle lipgloss.Style
 	err         error
@@ -86,9 +85,6 @@ func (m queryInput) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.textarea.SetWidth(msg.Width)
 		m.viewport.Height = msg.Height - m.textarea.Height() - lipgloss.Height(gap)
 
-		if len(m.messages) > 0 {
-			m.viewport.SetContent(lipgloss.NewStyle().Width(m.viewport.Width).Render(strings.Join(m.messages, "\n")))
-		}
 		m.viewport.GotoBottom()
 
 		// subtract 2 columns to leave some margin on each side
