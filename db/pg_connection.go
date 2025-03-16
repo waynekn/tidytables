@@ -26,7 +26,7 @@ func ConnectPostgres(host, port, user, password, dbName string) (*sql.DB, error)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	pingErr := db.Ping()
 	if pingErr != nil {
 		return nil, pingErr

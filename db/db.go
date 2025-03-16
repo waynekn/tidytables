@@ -36,7 +36,7 @@ func QueryDB(q string) (*queryResult, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	tableColumns := utils.GetTableColumns(columns)
 	tableRows := utils.GetTableRows(rows, columns)
 
