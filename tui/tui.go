@@ -56,14 +56,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.mode = viewQuery
 	case tea.KeyMsg:
 		switch msg.Type {
-		case tea.KeyCtrlT:
-			if m.mode == viewQuery {
-				m.mode = viewTable
-			} else {
-				m.mode = viewQuery
-			}
-
-			return m, nil
 		case tea.KeyCtrlC, tea.KeyEsc:
 			return m, tea.Quit
 		}
