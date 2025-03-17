@@ -1,6 +1,8 @@
 package tui
 
 import (
+	"fmt"
+
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -20,15 +22,12 @@ func (m Table) Init() tea.Cmd {
 
 func (m Table) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
-	// Remove the global quit mapping from here if you want global control.
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "esc":
-			if m.table.Focused() {
-				m.table.Blur()
-			} else {
-				m.table.Focus()
+		switch msg.Type {
+		case tea.KeyCtrlBackslash:
+			return m, func() tea.Msg {
+				return switchToQueryInput{}
 			}
 		}
 	}
@@ -37,7 +36,12 @@ func (m Table) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Table) View() string {
-	return baseStyle.Render(m.table.View()) + "\n"
+	return fmt.Sprintf(
+		"%s\n%s",
+		baseStyle.Render(m.table.View()),
+		"(type ctrl+\\ to edit query)",
+	)
+
 }
 
 func initializeTable() Table {
