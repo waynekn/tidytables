@@ -94,7 +94,7 @@ func (m model) View() string {
 
 func StartTea() {
 
-	p := tea.NewProgram(initialModel() /*tea.WithAltScreen()*/)
+	p := tea.NewProgram(initialModel())
 
 	if _, err := p.Run(); err != nil {
 		log.Fatal(err)
