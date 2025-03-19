@@ -76,16 +76,13 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	if m.mode == viewQuery {
-		updatedModel, cmd := m.queryInput.Update(msg)
-		m.queryInput = updatedModel.(*queryInput)
+		_, cmd := m.queryInput.Update(msg)
 		return m, cmd
 	} else if m.mode == viewTable {
-		updatedModel, cmd := m.table.Update(msg)
-		m.table = updatedModel.(*Table)
+		_, cmd := m.table.Update(msg)
 		return m, cmd
 	} else if m.mode == viewError {
-		updatedModel, cmd := m.errDisplay.Update(msg)
-		m.errDisplay = updatedModel.(*errorDisplay)
+		_, cmd := m.errDisplay.Update(msg)
 		return m, cmd
 	}
 	return m, nil
