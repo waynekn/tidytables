@@ -102,6 +102,11 @@ func (m *queryInput) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.textarea.InsertString("\n")
 		case tea.KeyEnter:
 			value := m.textarea.Value()
+			value = strings.TrimSpace(value)
+
+			if value == "" {
+				return m, nil
+			}
 
 			q := strings.ReplaceAll(value, "\n", " ")
 			q = strings.ReplaceAll(q, "\"", "'")
