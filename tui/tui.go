@@ -92,14 +92,16 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m *model) View() string {
-	if m.mode == viewQuery {
+	switch m.mode {
+	case viewQuery:
 		return m.queryInput.View()
-	} else if m.mode == viewTable {
+	case viewTable:
 		return m.table.View()
-	} else if m.mode == viewError {
+	case viewError:
 		return m.errDisplay.View()
+	default:
+		return ""
 	}
-	return ""
 }
 
 func StartTea() {
