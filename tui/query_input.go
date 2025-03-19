@@ -38,7 +38,7 @@ type queryInput struct {
 	styles      *Styles
 }
 
-func queryModel() queryInput {
+func queryModel() *queryInput {
 	ta := textarea.New()
 	ta.Placeholder = "Write a query"
 	ta.Focus()
@@ -57,7 +57,7 @@ Easily view SQL query results in a clean, visually appealing table right from yo
 
 	ta.KeyMap.InsertNewline.SetEnabled(false)
 
-	return queryInput{
+	return &queryInput{
 		textarea:    ta,
 		viewport:    vp,
 		senderStyle: lipgloss.NewStyle().Foreground(lipgloss.Color("5")),
@@ -66,11 +66,11 @@ Easily view SQL query results in a clean, visually appealing table right from yo
 	}
 }
 
-func (m queryInput) Init() tea.Cmd {
+func (m *queryInput) Init() tea.Cmd {
 	return textarea.Blink
 }
 
-func (m queryInput) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *queryInput) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var (
 		tiCmd tea.Cmd
 		vpCmd tea.Cmd
@@ -120,7 +120,7 @@ func (m queryInput) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, tea.Batch(tiCmd, vpCmd)
 }
 
-func (m queryInput) View() string {
+func (m *queryInput) View() string {
 	borderStyle := lipgloss.NewStyle().
 		Border(lipgloss.NormalBorder()).
 		BorderForeground(m.styles.BorderColor).

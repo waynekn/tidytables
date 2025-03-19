@@ -3,6 +3,7 @@ package tui
 import (
 	"log"
 
+	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/waynekn/tidytables/db"
 )
@@ -17,15 +18,20 @@ const (
 
 type switchToQueryInput struct{}
 
+type queryResult struct {
+	tableColumns []table.Column
+	tableRows    []table.Row
+}
+
 type model struct {
-	queryInput queryInput
-	table      Table
-	errDisplay errorDisplay
+	queryInput *queryInput
+	table      *Table
+	errDisplay *errorDisplay
 	mode       viewMode
 }
 
-func initialModel() model {
-	return model{
+func initialModel() *model {
+	return &model{
 		queryInput: queryModel(),
 		table:      initializeTable(),
 		errDisplay: initErrorDisplay(),
@@ -33,11 +39,11 @@ func initialModel() model {
 	}
 }
 
-func (m model) Init() tea.Cmd {
+func (m *model) Init() tea.Cmd {
 	return nil
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case QuerySubmittedMsg:
 		res, err := db.QueryDB(msg.Query)
@@ -50,38 +56,41 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		}
 
-		m.table = NewTable(res.TableColumns, res.TableRows)
 		m.mode = viewTable
+		return m, func() tea.Msg {
+			return queryResult{
+				tableColumns: res.TableColumns,
+				tableRows:    res.TableRows,
+			}
+		}
+
 	case switchToQueryInput:
 		m.mode = viewQuery
+		return m, m.queryInput.Init()
 	case tea.KeyMsg:
 		switch msg.Type {
 		case tea.KeyCtrlC, tea.KeyEsc:
 			return m, tea.Quit
 		}
 	}
-	var cmd tea.Cmd
-	if m.mode == viewQuery {
-		var qi tea.Model
-		qi, cmd = m.queryInput.Update(msg)
-		m.queryInput = qi.(queryInput)
-		return m, cmd
 
+	if m.mode == viewQuery {
+		updatedModel, cmd := m.queryInput.Update(msg)
+		m.queryInput = updatedModel.(*queryInput)
+		return m, cmd
 	} else if m.mode == viewTable {
-		var t tea.Model
-		t, cmd = m.table.Update(msg)
-		m.table = t.(Table)
+		updatedModel, cmd := m.table.Update(msg)
+		m.table = updatedModel.(*Table)
 		return m, cmd
 	} else if m.mode == viewError {
-		var e tea.Model
-		e, cmd = m.errDisplay.Update(msg)
-		m.errDisplay = e.(errorDisplay)
+		updatedModel, cmd := m.errDisplay.Update(msg)
+		m.errDisplay = updatedModel.(*errorDisplay)
 		return m, cmd
 	}
 	return m, nil
 }
 
-func (m model) View() string {
+func (m *model) View() string {
 	if m.mode == viewQuery {
 		return m.queryInput.View()
 	} else if m.mode == viewTable {

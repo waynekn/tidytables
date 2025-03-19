@@ -16,13 +16,19 @@ type Table struct {
 	table table.Model
 }
 
-func (m Table) Init() tea.Cmd {
+func (m *Table) Init() tea.Cmd {
 	return nil
 }
 
-func (m Table) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *Table) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	switch msg := msg.(type) {
+	case queryResult:
+
+		newTable := getTable(msg.tableRows, msg.tableColumns)
+
+		newTable.SetStyles(getTableStyles())
+		m.table = newTable
 	case tea.KeyMsg:
 		switch msg.Type {
 		case tea.KeyCtrlBackslash:
@@ -35,7 +41,7 @@ func (m Table) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m Table) View() string {
+func (m *Table) View() string {
 	return fmt.Sprintf(
 		"%s\n%s",
 		baseStyle.Render(m.table.View()),
@@ -44,18 +50,18 @@ func (m Table) View() string {
 
 }
 
-func initializeTable() Table {
+func initializeTable() *Table {
 	columns := []table.Column{}
 
 	rows := []table.Row{}
 
-	t := table.New(
-		table.WithColumns(columns),
-		table.WithRows(rows),
-		table.WithFocused(true),
-		table.WithHeight(7),
-	)
+	t := getTable(rows, columns)
+	t.SetStyles(getTableStyles())
 
+	return &Table{table: t}
+}
+
+func getTableStyles() table.Styles {
 	s := table.DefaultStyles()
 	s.Header = s.Header.
 		BorderStyle(lipgloss.NormalBorder()).
@@ -66,33 +72,15 @@ func initializeTable() Table {
 		Foreground(lipgloss.Color("229")).
 		Background(lipgloss.Color("57")).
 		Bold(false)
-	t.SetStyles(s)
-
-	m := Table{table: t}
-
-	return m
+	return s
 }
 
-func NewTable(columns []table.Column, rows []table.Row) Table {
+func getTable(rows []table.Row, columns []table.Column) table.Model {
 	t := table.New(
 		table.WithColumns(columns),
 		table.WithRows(rows),
 		table.WithFocused(true),
 		table.WithHeight(10),
 	)
-	s := table.DefaultStyles()
-	s.Header = s.Header.
-		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(lipgloss.Color("240")).
-		BorderBottom(true).
-		Bold(false)
-	s.Selected = s.Selected.
-		Foreground(lipgloss.Color("229")).
-		Background(lipgloss.Color("57")).
-		Bold(false)
-	t.SetStyles(s)
-
-	m := Table{table: t}
-
-	return m
+	return t
 }

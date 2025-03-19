@@ -30,7 +30,7 @@ func getDisplayWidth() int {
 	return width - 5
 }
 
-func initErrorDisplay() errorDisplay {
+func initErrorDisplay() *errorDisplay {
 	ti := textarea.New()
 
 	ti.FocusedStyle = textarea.Style{
@@ -43,17 +43,17 @@ func initErrorDisplay() errorDisplay {
 
 	ti.Focus()
 
-	return errorDisplay{
+	return &errorDisplay{
 		textarea: ti,
 		err:      nil,
 	}
 }
 
-func (m errorDisplay) Init() tea.Cmd {
+func (m *errorDisplay) Init() tea.Cmd {
 	return nil
 }
 
-func (m errorDisplay) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *errorDisplay) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 	case dbError:
@@ -74,7 +74,7 @@ func (m errorDisplay) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m errorDisplay) View() string {
+func (m *errorDisplay) View() string {
 
 	return fmt.Sprintf(
 		"%s\n\n%s",
