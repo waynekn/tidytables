@@ -25,7 +25,7 @@ func (m *Table) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case queryResult:
 
-		newTable := getTable(msg.tableRows, msg.tableColumns)
+		newTable := createTable(msg.tableRows, msg.tableColumns)
 
 		newTable.SetStyles(getTableStyles())
 		m.table = newTable
@@ -55,7 +55,7 @@ func initializeTable() *Table {
 
 	rows := []table.Row{}
 
-	t := getTable(rows, columns)
+	t := createTable(rows, columns)
 	t.SetStyles(getTableStyles())
 
 	return &Table{table: t}
@@ -75,7 +75,7 @@ func getTableStyles() table.Styles {
 	return s
 }
 
-func getTable(rows []table.Row, columns []table.Column) table.Model {
+func createTable(rows []table.Row, columns []table.Column) table.Model {
 	t := table.New(
 		table.WithColumns(columns),
 		table.WithRows(rows),
