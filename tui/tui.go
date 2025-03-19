@@ -40,7 +40,8 @@ func initialModel() *model {
 }
 
 func (m *model) Init() tea.Cmd {
-	return nil
+	// makes the textareas cursor blink
+	return m.queryInput.Init()
 }
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
