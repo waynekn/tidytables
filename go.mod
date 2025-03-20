@@ -1,6 +1,6 @@
 module github.com/waynekn/tidytables
 
-go 1.23.4
+go 1.24.1
 
 require (
 	github.com/charmbracelet/bubbles v0.20.0
