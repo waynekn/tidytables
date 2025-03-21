@@ -14,7 +14,7 @@ type queryResult struct {
 	TableRows    []table.Row
 }
 
-func OpenDb(host, port, user, password, dbName string) (*sql.DB, error) {
+func ConnectToDb(host, port, user, password, dbName string) (*sql.DB, error) {
 	db, err := ConnectPostgres(host, port, user, password, dbName)
 	if err != nil {
 		return nil, err

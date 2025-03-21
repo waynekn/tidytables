@@ -24,7 +24,7 @@ This command requires specific flags to provide the necessary database connectio
 		dbName := getFlagValue(cmd, "name")
 		host := getFlagValue(cmd, "host")
 
-		connection, err := db.OpenDb(host, port, user, password, dbName)
+		connection, err := db.ConnectToDb(host, port, user, password, dbName)
 
 		if err != nil {
 			log.SetFlags(0)
