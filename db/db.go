@@ -15,7 +15,7 @@ type queryResult struct {
 }
 
 func ConnectToDb(host, port, user, password, dbName string) (*sql.DB, error) {
-	db, err := ConnectPostgres(host, port, user, password, dbName)
+	db, err := connectToPostgres(host, port, user, password, dbName)
 	if err != nil {
 		return nil, err
 	}

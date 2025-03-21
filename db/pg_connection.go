@@ -19,7 +19,7 @@ import (
 // Returns:
 //   - *sql.DB: a pointer to the database connection
 //   - error: an error if the connection fails
-func ConnectPostgres(host, port, user, password, dbName string) (*sql.DB, error) {
+func connectToPostgres(host, port, user, password, dbName string) (*sql.DB, error) {
 	dbURL := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", user, password, host, port, dbName)
 
 	db, err := sql.Open("pgx", dbURL)
