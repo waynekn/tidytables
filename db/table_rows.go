@@ -1,4 +1,4 @@
-package utils
+package db
 
 import (
 	"database/sql"
@@ -10,7 +10,9 @@ import (
 	"github.com/charmbracelet/bubbles/table"
 )
 
-func GetTableRows(rows *sql.Rows, columns []string) []table.Row {
+// Reads all rows from an sql.Rows object and converts them into
+// a slice of table.Row.
+func makeTableRows(rows *sql.Rows, columns []string) []table.Row {
 	// Create a slice to hold values for each row
 	var tableRows []table.Row
 

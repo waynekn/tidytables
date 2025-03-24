@@ -4,7 +4,6 @@ import (
 	"database/sql"
 
 	"github.com/charmbracelet/bubbles/table"
-	"github.com/waynekn/tidytables/utils"
 )
 
 var globalDb *sql.DB
@@ -37,8 +36,8 @@ func QueryDB(q string) (*queryResult, error) {
 		return nil, err
 	}
 
-	tableColumns := utils.GetTableColumns(columns)
-	tableRows := utils.GetTableRows(rows, columns)
+	tableColumns := makeTableColumns(columns)
+	tableRows := makeTableRows(rows, columns)
 
 	return &queryResult{TableColumns: tableColumns, TableRows: tableRows}, nil
 }
