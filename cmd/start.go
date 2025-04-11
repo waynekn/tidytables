@@ -52,21 +52,21 @@ This command requires specific flags to provide the necessary database connectio
 func init() {
 	rootCmd.AddCommand(startCmd)
 
-	startCmd.Flags().String("port", "5432", "port which the database is running on")
+	startCmd.Flags().String("port", "", "Port number where the database is running")
+	startCmd.Flags().StringP("host", "H", "localhost", "Hostname or IP address of the database server")
 
-	startCmd.Flags().StringP("host", "H", "localhost", "the host of the database")
-
-	startCmd.Flags().StringP("user", "U", "", "user to connect to the database as")
+	startCmd.Flags().StringP("user", "u", "", "Username for connecting to the database")
 	startCmd.MarkFlagRequired("user")
 
-	startCmd.Flags().StringP("password", "P", "", "database password")
+	startCmd.Flags().StringP("password", "p", "", "Password for the database user")
 	startCmd.MarkFlagRequired("password")
 
-	startCmd.Flags().StringP("name", "N", "", "name of the database to connect to")
+	startCmd.Flags().StringP("name", "n", "", "Name of the target database")
 	startCmd.MarkFlagRequired("name")
 
-	startCmd.Flags().String("db", "postgres", "name of the relational database management system")
-	startCmd.MarkFlagRequired("db")
+	startCmd.Flags().StringP("engine", "e", "", "Database engine type. postgres or mysql (case insensitive)")
+	startCmd.MarkFlagRequired("engine")
+
 }
 
 func getFlagValue(cmd *cobra.Command, flag string) string {
