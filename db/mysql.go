@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"fmt"
 
-	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/go-sql-driver/mysql"
 )
 
-const defaultPgPort = "5432"
+const defaultMySqlPort = "3306"
 
-// Handles connection to a PostgreSQL database.
+// Handles connection to a MySQL database.
 //
 // Parameters:
 //   - host: the database host
@@ -21,18 +21,25 @@ const defaultPgPort = "5432"
 // Returns:
 //   - *sql.DB: a pointer to the database connection
 //   - error: an error if the connection fails
-func connectToPostgres(host, port, user, password, dbName string) (*sql.DB, error) {
-	var pgPort string
+func connectToMysql(host, port, user, password, dbName string) (*sql.DB, error) {
+
+	var mySqlPort string
 
 	if port == "" {
-		pgPort = defaultPgPort
+		mySqlPort = defaultMySqlPort
 	} else {
-		pgPort = port
+		mySqlPort = port
 	}
 
-	dbURL := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", user, password, host, pgPort, dbName)
+	cfg := mysql.Config{
+		User:   user,
+		Passwd: password,
+		Net:    "tcp",
+		Addr:   fmt.Sprintf("%s:%s", host, mySqlPort),
+		DBName: dbName,
+	}
+	db, err := sql.Open("mysql", cfg.FormatDSN())
 
-	db, err := sql.Open("pgx", dbURL)
 	if err != nil {
 		return nil, err
 	}
@@ -42,5 +49,5 @@ func connectToPostgres(host, port, user, password, dbName string) (*sql.DB, erro
 		return nil, pingErr
 	}
 
-	return db, err
+	return db, nil
 }

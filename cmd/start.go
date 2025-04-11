@@ -22,9 +22,10 @@ This command requires specific flags to provide the necessary database connectio
 		user := getFlagValue(cmd, "user")
 		password := getFlagValue(cmd, "password")
 		dbName := getFlagValue(cmd, "name")
+		dbEngine := getFlagValue(cmd, "engine")
 		host := getFlagValue(cmd, "host")
 
-		connection, err := db.ConnectToDb(host, port, user, password, dbName)
+		connection, err := db.ConnectToDb(dbEngine, host, port, user, password, dbName)
 
 		if err != nil {
 			log.SetFlags(0)

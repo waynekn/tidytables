@@ -2,6 +2,8 @@ package db
 
 import (
 	"database/sql"
+	"log"
+	"strings"
 
 	"github.com/charmbracelet/bubbles/table"
 )
@@ -13,8 +15,22 @@ type queryResult struct {
 	TableRows    []table.Row
 }
 
-func ConnectToDb(host, port, user, password, dbName string) (*sql.DB, error) {
-	db, err := connectToPostgres(host, port, user, password, dbName)
+func ConnectToDb(dbEngine, host, port, user, password, dbName string) (*sql.DB, error) {
+	var db *sql.DB
+	var err error
+
+	switch strings.ToLower(dbEngine) {
+	case "postgres":
+		db, err = connectToPostgres(host, port, user, password, dbName)
+	case "mysql":
+		db, err = connectToMysql(host, port, user, password, dbName)
+	default:
+		log.Fatal("You've entered an unsupported database engine. " +
+			"The supported engines are postgres and mysql, " +
+			"case insensitive.")
+
+	}
+
 	if err != nil {
 		return nil, err
 	}
