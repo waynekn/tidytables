@@ -1,6 +1,13 @@
+## Overview
+
 Tidy Tables is designed to enhance the experience of querying a database from the terminal.
 With Tidy tables, users can view query results in a clean and visually appealing table
 directly from the terminal.
+
+## Supprted databases
+
+- PostgreSQL
+- MySQL
 
 ## Usage
 
