@@ -9,6 +9,18 @@ directly from the terminal.
 - PostgreSQL
 - MySQL
 
+## Installation
+
+Follow these steps to get started.
+
+1.  Clone the repository.
+
+```bash
+git clone https://github.com/waynekn/tidytables.git
+```
+
+2. Move to the directory `cd tidytables` and start the application.
+
 ## Usage
 
 To start the application, use the `ttb start` command
